@@ -1,30 +1,25 @@
-var aws = require('aws-sdk');
-var ses = new aws.SES({
-   region: 'us-east-1'
+const aws = require('aws-sdk');
+const ses = new aws.SES({
+    region: 'us-east-1'
 });
 
-exports.handler = function(event, context) {
-    var eParams = {
+exports.handler = (event)=>{
+    // console.log(event.Records[0].Sns.Message);
+    const email = {
         Destination: {
-            ToAddresses: ["zhang.zhiyo@husky.neu.edu"]
+            ToAddresses: [event.Records[0].Sns.Message]
         },
         Message: {
             Body: {
                 Text: {
-                    Data: "Hey! What is up?"
+                    Data: "Reset password"
                 }
             },
             Subject: {
-                Data: "Email Subject!!!"
+                Data: "Reset password"
             }
         },
         Source: "zhang.zhiyo@husky.neu.edu"
     };
-
-    var email = ses.sendEmail(eParams, function(err, data){
-        if(err) console.log(err);
-        else {
-           
-        }
-    });
+    ses.sendEmail(email, ()=>{});
 };

@@ -19,7 +19,7 @@ exports.handler = (event)=>{
                 Data: "Reset password"
             }
         },
-        Source: "zhang.zhiyo@husky.neu.edu"
+        Source: "reset-password@csye6225-fall2018-zhangzhiyo.me"
     };
     ses.sendEmail(email, ()=>{});
 };

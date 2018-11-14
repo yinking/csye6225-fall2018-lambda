@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk')
-const ses = new AWS.SES({
-    region: 'us-east-1'
-})
-const ddb = new AWS.DynamoDB({apiVersion: '2012-10-08'})
+AWS.config.update({region: 'us-east-1'})
+const ses = new AWS.SES()
+const dynamoDB = new AWS.DynamoDB()
+const route53domains = new AWS.Route53Domains()
 
 exports.handler = function (event, context) {
     const email = event.Records[0].Sns.Message
@@ -14,7 +14,7 @@ exports.handler = function (event, context) {
         }
     }
 
-    ddb.getItem(getItemObject, function (err, data) {
+    dynamoDB.getItem(getItemObject, function (err, data) {
             if (data.Item === undefined) {
                 const putItemObject = {
                     TableName: 'csye6225',
@@ -24,29 +24,31 @@ exports.handler = function (event, context) {
                         ttl: {N: (Math.floor(Date.now() / 1000) + 60 * 20).toString()}
                     }
                 }
-                ddb.putItem(putItemObject, function () {
+                dynamoDB.putItem(putItemObject, function () {
                     }
                 )
 
-                const emailObject = {
-                    Destination: {
-                        ToAddresses: [email]
-                    },
-                    Message: {
-                        Body: {
-                            Text: {
+                route53domains.listDomains(params, function (err, data) {
+                    const emailObject = {
+                        Destination: {
+                            ToAddresses: [email]
+                        },
+                        Message: {
+                            Body: {
+                                Text: {
+                                    Data: "Reset password"
+                                }
+                            },
+                            Subject: {
                                 Data: "Reset password"
                             }
                         },
-                        Subject: {
-                            Data: "Reset password"
-                        }
-                    },
-                    Source: "reset-password@csye6225-fall2018-zhangzhiyo.me"
-                }
-                ses.sendEmail(emailObject, function () {
+                        Source: "reset-password@" + data.Domains[0].DomainName
                     }
-                )
+                    ses.sendEmail(emailObject, function () {
+                        }
+                    )
+                });
             }
         }
     )

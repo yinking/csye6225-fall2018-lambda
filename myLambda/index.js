@@ -27,7 +27,7 @@ exports.handler = (event, context) => {
         dynamoDB.putItem(putItemObject, () => {})
 
         route53.listHostedZones({}, (err, data) => {
-            const domainName=data.HostedZones[0].Name
+            const domainName = data.HostedZones[0].Name
             const emailObject = {
                 Destination: {
                     ToAddresses: [email]
@@ -42,10 +42,10 @@ exports.handler = (event, context) => {
                         Data: "Reset password"
                     }
                 },
-                Source: "reset-password@" + domainName.substring(0,domainName.length-1)
+                Source: "reset-password@" + domainName.substring(0, domainName.length - 1)
             }
             ses.sendEmail(emailObject, () => {})
     });
     }
 })
-}ggit 
+}

@@ -16,37 +16,37 @@ exports.handler = (event, context) => {
 
     dynamoDB.getItem(getItemObject, (err, data) => {
         if (data.Item === undefined) {
-        const putItemObject = {
-            TableName: 'csye6225',
-            Item: {
-                id: { S: email },
-                token: { S: context.awsRequestId },
-                ttl: { N: (Math.floor(Date.now() / 1000) + 60 * 20).toString() }
+            const putItemObject = {
+                TableName: 'csye6225',
+                Item: {
+                    id: { S: email },
+                    token: { S: context.awsRequestId },
+                    ttl: { N: (Math.floor(Date.now() / 1000) + 60 * 20).toString() }
+                }
             }
-        }
-        dynamoDB.putItem(putItemObject, () => {})
+            dynamoDB.putItem(putItemObject, () => {})
 
-        route53.listHostedZones({}, (err, data) => {
-            const domainName = data.HostedZones[0].Name
-            const emailObject = {
-                Destination: {
-                    ToAddresses: [email]
-                },
-                Message: {
-                    Body: {
-                        Text: {
-                            Data: "http:/lajifangyu/reset?email=user@" + domainName.substring(0, domainName.length - 1) + "&token=" + context.awsRequestId
+            route53.listHostedZones({}, (err, data) => {
+                let domainName = data.HostedZones[0].Name
+                domainName = domainName.substring(0, domainName.length - 1)
+                const emailObject = {
+                    Destination: {
+                        ToAddresses: [email]
+                    },
+                    Message: {
+                        Body: {
+                            Text: {
+                                Data: "http://" + domainName + "/reset?email=" + email + "&token=" + context.awsRequestId
+                            }
+                        },
+                        Subject: {
+                            Data: "Reset password"
                         }
                     },
-                    Subject: {
-                        Data: "Reset password"
-                    }
-                },
-                Source: "reset-password@" + domainName.substring(0, domainName.length - 1)
-            }
-            ses.sendEmail(emailObject, () => {})
-    });
-    }
-})
+                    Source: "reset-password@" + domainName.substring(0, domainName.length - 1)
+                }
+                ses.sendEmail(emailObject, () => {})
+            });
+        }
+    })
 }
-

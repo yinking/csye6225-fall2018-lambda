@@ -3,6 +3,7 @@ install: true
 script: true
 
 after_success:
-- zip -r myLambda.zip myLambda
 - pip install awscli --upgrade --user
-- aws lambda update-function-code --function-name myLambdaFunction --zip-file myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip
+- zip -r myLambda.zip myLambda
+- pwd
+- aws lambda update-function-code --function-name myLambdaFunction --zip-file fileb://myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip

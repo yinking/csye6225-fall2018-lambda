@@ -4,4 +4,4 @@ script: true
 
 after_success:
 - zip -r myLambda.zip myLambda
-- update-function-code --function-name <value> --zip-file myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip
+- update-function-code --function-name myLambdaFunction --zip-file myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip

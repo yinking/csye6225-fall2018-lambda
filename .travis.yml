@@ -6,5 +6,4 @@ after_success:
 - pip install awscli --upgrade --user
 - zip -r myLambda.zip myLambda
 - pwd
-- aws --region us-east-1
-- aws lambda update-function-code --function-name myLambdaFunction --zip-file fileb://myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip
+- aws --region us-east-1 lambda update-function-code --function-name myLambdaFunction --zip-file fileb://myLambda.zip --s3-bucket $lambda_functions_s3_bucket --s3-key myLambda.zip

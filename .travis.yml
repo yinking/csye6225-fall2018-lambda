@@ -5,6 +5,5 @@ script: true
 after_success:
 - pip install awscli --upgrade --user
 - zip -r myLambda.zip myLambda
-#- aws s3 rm s3://$lambda_functions_s3_bucket/myLambda.zip
 - aws s3 mv myLambda.zip s3://$lambda_functions_s3_bucket/myLambda.zip
 - aws --region us-east-1 lambda update-function-code --function-name myLambdaFunction --zip-file fileb://myLambda.zip

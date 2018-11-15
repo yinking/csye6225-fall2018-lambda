@@ -35,7 +35,7 @@ exports.handler = (event, context) => {
                 Message: {
                     Body: {
                         Text: {
-                            Data: "http://lajiluohan/reset?email=user@" + domainName.substring(0, domainName.length - 1) + "&token=" + context.awsRequestId
+                            Data: "http:/lajifangyu/reset?email=user@" + domainName.substring(0, domainName.length - 1) + "&token=" + context.awsRequestId
                         }
                     },
                     Subject: {

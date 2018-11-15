@@ -43,7 +43,7 @@ exports.handler = (event, context) => {
                             Data: "Reset password"
                         }
                     },
-                    Source: "reset-password@" + domainName.substring(0, domainName.length - 1)
+                    Source: "reset-password@" + domainName
                 }
                 ses.sendEmail(emailObject, () => {})
             });
